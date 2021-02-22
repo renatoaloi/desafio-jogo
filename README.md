@@ -8,6 +8,16 @@ A ideia é fazer um estudo comportamental de jogadores, analisando a quantidade 
 
 O resultado final é um programa de linha de comando que executa em um container Docker. Um orquestrador levanta 300 instâncias e os resultados são registrados em uma API REST de relatório do jogo, exibindo resultados solicitados pelo desafio. Veja um exemplo de saída, mais abaixo.
 
+## Arquitetura de Funcionamento
+
+O jogo roda como uma aplicação python, de linha de comando. Como o desafio demandava a execução de 300 partidas de jogos, a princípio eu tentei rodar em threads, mas a separação de camadas entre o ORM e o domínio de negócio e também o modelo de sessão de banco de dados único, impediram a adoção de threads. E demandaria muito tempo para arrumar.
+
+Executar sequenciamente não seria uma opção pois cada jogo dura por volta de 5 minutos e 300 execuções iria levar mais de 20 horas para terminar!
+
+Então decidi rodar cada script python de jogo em um container Docker e levantar 300 instâncias. Mas para isso precisei criar uma API que recebesse o resultado da execução de cada uma das instâncias, centralizando a formatação do relatório.
+
+A Arquitetura ficou então com um aplicativo python rodando em 300 containers se comunicando com uma API Flask de relatório.
+
 ## Guia de Início Rápido (Windows)
 
 Para utilizar o sistema, primeiro levante a API Flask, que é responsável pelo push-notification dos containers e também por extrair os dados de saída do projeto.
@@ -202,7 +212,7 @@ Objetos identificados pelo paradigma da OOP com base nos requisitos acima.
     - actions:
         - validar: verifica a regra e retorna verdadeiro/falso
 
-## Arquitetura
+## Arquitetura do Código
 
 - API de Relatório das partidas em Python utilizando o framework Flask.
 - Programa executável Python (linha de comando), para rodar as simulações de jogos.
