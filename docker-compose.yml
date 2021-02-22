@@ -1,0 +1,5 @@
+version: "3"
+
+services:
+  jogo:
+    image: jogo:latest
