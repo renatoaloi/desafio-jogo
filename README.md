@@ -8,33 +8,36 @@ A ideia é fazer um estudo comportamental de jogadores, analisando a quantidade 
 
 O resultado final é um programa de linha de comando que executa em um container Docker. Um orquestrador levanta 300 instâncias e os resultados são registrados em uma API REST de relatório do jogo, exibindo resultados solicitados pelo desafio. Veja um exemplo de saída, mais abaixo.
 
-## Guia de Início Rápido
+## Guia de Início Rápido (Windows)
 
 Para utilizar o sistema, primeiro levante a API Flask, que é responsável pelo push-notification dos containers e também por extrair os dados de saída do projeto.
 
+Abra um PowerShell e digite o seguinte:
+
 ```
 > virtualenv env
+> .\env\Scripts\activate
+> pip install -r .\requirements.txt
 > $env:FLASK_APP="api/app.py"
-> ...
+> $env:JOGO_DB_URL="sqlite:///banco_imob_report.sqlite3"
+```
+Agora rode o servidor http, executando o comando abaixo:
+
+```
 > python -m flask run --host=0.0.0.0
 ```
 
-Antes de compilar o container do jogo, precisamos configurar o arquivo ```app.py``` perto da linha 40:
+Depois então em outro terminal PowerShell comece a preparar o container, primeiro configurando a variável de ambiente da URL de push notification, no arquivo ```Dockerfile```, conforme abaixo:
 
-```
-...
-r = requests.post(
-    "http://**ip_do_seu_pc**:5000/jogo/resultado", 
-    json=jogo.serialize
-)
-...
+```js
+ENV JOGO_RESULTADO_URL="http://**ip_do_seu_pc**:5000/jogo/resultado"
 ```
 
-Onde: ``` **ip_do_seu_pc** ``` é o ip do host rodando a API Flask, no caso, rodei na minha máquina, mas pode ser um ECS, um EC2, etc.
+Onde: ``` **ip_do_seu_pc** ``` é o ip do host rodando a API Flask, no caso, rodei na minha máquina, mas pode ser um container ECS, um EC2, etc.
 
 > OBS: Desde que o container rodando o jogo tenha acesso a internet, para testes em desenvolvimento. Para uma implementação em produção precisaria fechar os dois serviços em uma subnet, fechada, sem acesso a internet, por segurança.
 
-Depois então comece a prepara o container, compilando ele:
+Então compile o container, executando o comando:
 
 ```
 > docker build -t jogo .
@@ -57,8 +60,10 @@ Não se esqueça ao final de derrubar todos os containers.
 A execução dos containers rodando o jogo deve demorar por volta de 1 hora, após isso basta acessar a API para extrair o relatório, no formato JSON:
 
 ```
-http://localhost:5000/jogo/relatorio
+http://**ip_do_seu_pc**:5000/jogo/relatorio
 ```
+
+> OBS: Você pode acessar o relatório mesmo antes de terminar, para acompanhar a evolução dos dados.
 
 ## Exemplo de Relatório de Saída
 

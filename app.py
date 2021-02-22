@@ -2,6 +2,7 @@ from jogo.business.regras import JogoRegras
 from threading import Thread
 import requests
 import json
+import os
 
 
 class App():
@@ -38,7 +39,7 @@ def main():
     app.jogar(jogo.id)
     jogo = app.resultado(jogo.id)
     r = requests.post(
-        "http://192.168.15.8:5000/jogo/resultado", 
+        os.environ.get('JOGO_RESULTADO_URL', r'http://localhost:5000/jogo/resultado'), 
         json=jogo.serialize
     )
     print(jogo.serialize)
