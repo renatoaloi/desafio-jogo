@@ -8,15 +8,6 @@ A ideia é fazer um estudo comportamental de jogadores, analisando a quantidade 
 
 O resultado final é um programa de linha de comando que executa em um container Docker. Um orquestrador levanta 300 instâncias e os resultados são registrados em uma API REST de relatório do jogo, exibindo resultados solicitados pelo desafio. Veja um exemplo de saída, mais abaixo.
 
-
-echo "# desafio-jogo" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/renatoaloi/desafio-jogo.git
-git push -u origin main
-
 ## Guia de Início Rápido
 
 Para utilizar o sistema, primeiro levante a API Flask, que é responsável pelo push-notification dos containers e também por extrair os dados de saída do projeto.
