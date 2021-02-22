@@ -75,6 +75,15 @@ http://**ip_do_seu_pc**:5000/jogo/relatorio
 
 > OBS: Você pode acessar o relatório mesmo antes de terminar, para acompanhar a evolução dos dados.
 
+## Testes Unitários
+
+Para executar os testes unitários, utilize os comandos abaixo:
+
+```
+> python -m unittest tests.models
+> python -m unittest tests.controllers
+```
+
 ## Exemplo de Relatório de Saída
 
 ```json
